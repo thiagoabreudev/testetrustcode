@@ -14,6 +14,7 @@ def main():
     item6(api)  # lista juntamente os produtos que foram comprados na mairo venda e o valor total de cada.
     item7(api)  # valor total de possíveis vendas (orçamentos) com o valor total de vendas feitas (vendas confirmadas)
     item8(api)  # Vamos ajudar o financeiro agora, você deve mostrar qual o valor total de faturas (notas fiscais) do mês de junho de 2017.
+    item9(api)  # Para o cliente que você criou, você deve criar um orçamento para o mesmo com pelo menos um produto
 
 
 def item1(api):
@@ -88,6 +89,21 @@ def item8(api):
                              {'fields': ['amount_total']})))
 
     print u'ITEM 8 - O VALOR TOTAL DAS FATURAS DO MES DE JUNHO DE 2017 FOI DE R${fatura}'.format(fatura=fatura)
+
+
+def item9(api):
+    cliente_id = api.search('res.partner', [('cnpj_cpf', '=', '06896429623')])
+    values = {
+        'partner_id': cliente_id[0],
+        'pricelist_id': 1,
+        'order_line': [
+            [0, False, {'product_id': 270, 'product_uom_qty': 1}]
+        ]
+    }
+    orcamento_id = api.create('sale.order', values)
+    print u'ITEM 9 - FOI CRIADO UM ORCAMENTO COM O ID {id}'.format(id=orcamento_id)
+
+
 
 def limpar_registros(api):
     print u'Deletando orcamentos...'
