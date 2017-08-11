@@ -9,6 +9,7 @@ def main():
     item1(api)  # Criando cliente
     item2(api)  # Alterando cliente
     item3(api)  # Quantidade de clientes na base
+    item4(api)  # Listar os 10 primeiros clientes por ordem alfabética (Nome e Cidade que mora)
 
 
 def item1(api):
@@ -33,6 +34,14 @@ def item3(api):
     print u'ITEM 3 - ESTA BASE POSSUI {clientes} CLIENTES.'.format(clientes=clientes)
 
 
+def item4(api):
+    clientes_ordenado = api.search_read('res.partner', [], {'fields': ['name', 'city'], 'order': 'name', 'limit': 10})
+    print u'ITEM 4 - OS 10 PRIMEIROS CLIENTES EM ORDEM ALFABETICA'
+    for cliente in clientes_ordenado:
+        print u'\tNome: {nome} | Cidade: {cidade}'.format(nome=cliente.get('name'),
+                                                          cidade=cliente.get('city') or U'NAO INFORMOU')
+
+
 def limpar_registros(api):
     print u'Deletando orcamentos...'
     print u'Deletando cliente....'
@@ -46,6 +55,7 @@ def limpar_registros(api):
                 pass
             api.unlink('sale.order', orders)
         api.unlink('res.partner', cliente_id)
+
 
 if __name__ == '__main__':
     main()
