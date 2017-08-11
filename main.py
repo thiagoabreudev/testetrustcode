@@ -10,6 +10,7 @@ def main():
     item2(api)  # Alterando cliente
     item3(api)  # Quantidade de clientes na base
     item4(api)  # Listar os 10 primeiros clientes por ordem alfabética (Nome e Cidade que mora)
+    item5(api)  # Utilizando a api busque os dados da maior venda feita (mostre os dados do cliente, e valor total)
 
 
 def item1(api):
@@ -40,6 +41,15 @@ def item4(api):
     for cliente in clientes_ordenado:
         print u'\tNome: {nome} | Cidade: {cidade}'.format(nome=cliente.get('name'),
                                                           cidade=cliente.get('city') or U'NAO INFORMOU')
+
+
+def item5(api):
+    maior_venda = api.search_read('sale.order', [],
+                                  {'fields': ['partner_id', 'amount_total'],
+                                   'order': 'amount_total desc',
+                                   'limit': 1})
+    print u'ITEM 5 - A maior venda realizada foi no valor de R${valor} para o cliente {cliente}.' \
+        .format(valor=maior_venda[0].get('amount_total'), cliente=maior_venda[0].get('partner_id')[1])
 
 
 def limpar_registros(api):
