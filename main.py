@@ -15,6 +15,7 @@ def main():
     item7(api)  # valor total de possíveis vendas (orçamentos) com o valor total de vendas feitas (vendas confirmadas)
     item8(api)  # Vamos ajudar o financeiro agora, você deve mostrar qual o valor total de faturas (notas fiscais) do mês de junho de 2017.
     item9(api)  # Para o cliente que você criou, você deve criar um orçamento para o mesmo com pelo menos um produto
+    item10(api) # Você gostou muito do preço do produto e agora decidiu comprar o mesmo, você via api deve confirmar a venda.
 
 
 def item1(api):
@@ -103,6 +104,14 @@ def item9(api):
     orcamento_id = api.create('sale.order', values)
     print u'ITEM 9 - FOI CRIADO UM ORCAMENTO COM O ID {id}'.format(id=orcamento_id)
 
+
+def item10(api):
+    cliente_id = api.search('res.partner', [('cnpj_cpf', '=', '06896429623')])
+    if cliente_id:
+        orders = api.search('sale.order', [('partner_id', '=', cliente_id)])
+        if orders:
+            api.exec_method('sale.order', 'action_confirm', orders)
+            print u'ITEM 10 - O STATUS DA ORDEM FOI ALTERADO COM SUCESSO'
 
 
 def limpar_registros(api):
