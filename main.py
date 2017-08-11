@@ -13,6 +13,8 @@ def main():
     item5(api)  # Utilizando a api busque os dados da maior venda feita (mostre os dados do cliente, e valor total)
     item6(api)  # lista juntamente os produtos que foram comprados na mairo venda e o valor total de cada.
     item7(api)  # valor total de possíveis vendas (orçamentos) com o valor total de vendas feitas (vendas confirmadas)
+    item8(api)  # Vamos ajudar o financeiro agora, você deve mostrar qual o valor total de faturas (notas fiscais) do mês de junho de 2017.
+
 
 def item1(api):
     vals = {
@@ -79,6 +81,13 @@ def item7(api):
     print u'ITEM 7 - VENDAS CONFIRMADAS: R$ {vendas} | ORCAMENTOS EM ABERTO: {orcamentos} | PERCENTUAL DE FECHAMENTO' \
           u' {fechamento} %'.format(vendas=ordens_confirmadas, orcamentos=orcamentos, fechamento=percentual)
 
+
+def item8(api):
+    fatura = sum(map(lambda i: i.get('amount_total'), api.search_read('account.invoice',
+                             [('date_invoice', '>=', '2017-06-01'), ('date_invoice', '<=', '2017-06-30')],
+                             {'fields': ['amount_total']})))
+
+    print u'ITEM 8 - O VALOR TOTAL DAS FATURAS DO MES DE JUNHO DE 2017 FOI DE R${fatura}'.format(fatura=fatura)
 
 def limpar_registros(api):
     print u'Deletando orcamentos...'
