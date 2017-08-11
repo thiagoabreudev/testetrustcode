@@ -11,6 +11,7 @@ def main():
     item3(api)  # Quantidade de clientes na base
     item4(api)  # Listar os 10 primeiros clientes por ordem alfabética (Nome e Cidade que mora)
     item5(api)  # Utilizando a api busque os dados da maior venda feita (mostre os dados do cliente, e valor total)
+    item6(api)  # lista juntamente os produtos que foram comprados na mairo venda e o valor total de cada.
 
 
 def item1(api):
@@ -50,6 +51,21 @@ def item5(api):
                                    'limit': 1})
     print u'ITEM 5 - A maior venda realizada foi no valor de R${valor} para o cliente {cliente}.' \
         .format(valor=maior_venda[0].get('amount_total'), cliente=maior_venda[0].get('partner_id')[1])
+
+
+def item6(api):
+    maior_venda = api.search_read('sale.order', [],
+                                  {'fields': ['partner_id', 'amount_total', 'order_line', 'total_tax'],
+                                   'order': 'amount_total desc',
+                                   'limit': 1})
+    produto_ids = maior_venda[0].get('order_line')
+    imposto = maior_venda[0].get('total_tax')
+    print u'ITEM 6 - IMPOSTOS E PRODUTOS'
+    print u'\tPagou o valor de R${imposto} em impostos'.format(imposto=imposto)
+    produtos = api.read('sale.order.line', produto_ids, ['product_id', 'price_subtotal'])
+    for produto in produtos:
+        print u'\tProduto: {produto} no valor de R$: {valor}'.format(produto=produto.get('product_id')[1],
+                                                                   valor=produto.get('price_subtotal'))
 
 
 def limpar_registros(api):
