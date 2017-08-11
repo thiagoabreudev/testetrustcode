@@ -7,6 +7,7 @@ def main():
     api = Api()
     limpar_registros(api)  # Limpa registros da ultima execucao
     item1(api)  # Criando cliente
+    item2(api)  # Alterando cliente
 
 
 def item1(api):
@@ -18,6 +19,12 @@ def item1(api):
     }
     cliente_id = api.create('res.partner', vals)
     print U'ITEM 1 - CLIENTE COM CRIADO COM O ID {id}'.format(id=cliente_id)
+
+
+def item2(api):
+    cliente_id = api.search('res.partner', [('cnpj_cpf', '=', '06896429623')])
+    api.write('res.partner', cliente_id, {'rg_fisica': 'MG-12.896.140'})
+    print 'O CLIENTE DE ID {id} FOI ALTERADO COM SUCESSO'.format(id=cliente_id[0])
 
 
 def limpar_registros(api):
